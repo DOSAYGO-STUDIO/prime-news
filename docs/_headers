@@ -1,0 +1,9 @@
+/jswasm/*.wasm
+  Content-Type: application/wasm
+
+/shards/*.sqlite
+  Content-Type: application/octet-stream
+
+/shards/*.sqlite.gz
+  Content-Type: application/octet-stream
+  Cache-Control: public, max-age=31536000, immutable

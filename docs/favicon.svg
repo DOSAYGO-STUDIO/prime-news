@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- HN Orange Background -->
+  <rect width="64" height="64" fill="#ff6600" />
+  
+  <!-- The Riemann Zeta Symbol -->
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Times New Roman, serif" font-size="42" font-weight="normal">ζ</text>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "name": "prime-hn",
+  "version": "1.0.0",
+  "scripts": {
+    "etl": "node etl.js --gzip"
+  },
+  "dependencies": {
+    "better-sqlite3": "latest"
+  }
+}

@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <title>Hacker News Prime</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        /* THE AUTHENTIC HN STYLESHEET */
+        body { 
+            font-family: Verdana, Geneva, sans-serif; 
+            font-size: 10pt; 
+            color: #828282; 
+            margin: 0; 
+            background-color: white; 
+        }
+        @media(min-width: 768px) { body { margin: 8px; } }
+        
+        table { border-collapse: collapse; }
+        
+        td { font-family: Verdana, Geneva, sans-serif; font-size:10pt; color:#828282; }
+        .admin td { font-family: Verdana, Geneva, sans-serif; font-size:8.5pt; color:#000000; }
+        .subtext td { font-family: Verdana, Geneva, sans-serif; font-size:7pt; color:#828282; }
+        input { font-family: monospace; font-size:10pt; }
+        input[type='submit'] { font-family: Verdana, Geneva, sans-serif; }
+        textarea { font-family: monospace; font-size:10pt; resize: both; }
+        .pagetop { font-family: Verdana, Geneva, sans-serif; font-size:10pt; color:#222222; line-height:22px; }
+        .topsel a:link, .topsel a:visited { color:#ffffff; }
+        .default { font-family: Verdana, Geneva, sans-serif; font-size:10pt; color:#828282; }
+        .admin { font-family: Verdana, Geneva, sans-serif; font-size:8.5pt; color:#000000; }
+        .title { font-family: Verdana, Geneva, sans-serif; font-size:10pt; color:#828282; overflow:hidden; }
+        .subtext { font-family: Verdana, Geneva, sans-serif; font-size:7pt; color:#828282; }
+        .yclinks { font-family: Verdana, Geneva, sans-serif; font-size:8pt; color:#828282; }
+        .titleline a { color:#000000; }
+        .titleline a:visited { color:#828282; }
+        .subtext a { color:#828282; text-decoration:none; }
+        .subtext a:hover { text-decoration:underline; }
+        .score { color:#828282; }
+        .morelink { font-family: Verdana, Geneva, sans-serif; font-size:10pt; color:#000000; text-decoration:none; padding-left:15px;}
+        .comment { font-family: Verdana, Geneva, sans-serif; font-size:9pt; }
+        .hnname { font-weight:bold; margin-left:1px; margin-right:5px; }
+        .prime-zeta { color: #ff6600 !important; }
+        .hnmore { text-decoration:underline; }
+        .hnmore a:link, .hnmore a:visited { color:#828282; }
+        .c00, .c00 a:link { color:#000000; }
+        .c5a, .c5a a:link, .c5a a:visited { color:#5a5a5a; }
+        .c73, .c73 a:link, .c73 a:visited { color:#737373; }
+        .c82, .c82 a:link, .c82 a:visited { color:#828282; }
+        .c88, .c88 a:link, .c88 a:visited { color:#888888; }
+        .c9c, .c9c a:link, .c9c a:visited { color:#9c9c9c; }
+        .cae, .cae a:link, .cae a:visited { color:#aeaeae; }
+        .cbe, .cbe a:link, .cbe a:visited { color:#bebebe; }
+        .cce, .cce a:link, .cce a:visited { color:#cecece; }
+        .cdd, .cdd a:link, .cdd a:visited { color:#dddddd; }
+        .ca2 { color:#a30000; }
+        a:link { color:#000000; text-decoration:none; }
+        a:visited { color:#828282; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        .pagetop a { color:#000000; text-decoration:none; }
+        .pagetop a:visited { color:#000000; }
+        .pagetop a:hover, .yclinks a:hover { text-decoration:none; }
+        #hnmain { 
+            background-color: #f6f6ef; 
+            width: 85%; 
+            min-width: 800px;
+            margin: auto; 
+        }
+        @media(max-width: 768px) { #hnmain { width: 100%; min-width: 0; } }
+
+        /* header */
+        td.bgcolor { background-color: #DFFF00; }
+        td.bgcolor.top { height: 24px; }
+        td.bgcolor.bottom { height: 1px; }
+        .sup-anchor {
+            position: relative;
+            display: inline-block;
+            vertical-align: baseline;
+            padding-right: 0.1em;
+        }
+        .sup-anchor sup {
+            position: absolute;
+            left: calc(1ex + 0.125em);
+            font-size: 8pt;
+            line-height: 1;
+        }
+
+        /* Item List Styling */
+        .itemlist { padding-right: 10px; }
+        .rank { font-size: 10pt; color: #828282; text-align: right; padding-right: 5px; vertical-align: top;}
+        .title { font-size: 10pt; color: #828282; overflow: hidden; }
+        .titleline { overflow: hidden; }
+        .titleline a { color: #000000; }
+        .titleline a:visited { color: #828282; }
+        
+        .subtext { font-family: Verdana, Geneva, sans-serif; font-size: 7pt; color: #828282; }
+        .subtext a { color: #828282; text-decoration: none; }
+        .subtext a:hover { text-decoration: underline; }
+        .score { color: #828282; }
+        
+        .spacer { height: 5px; }
+        .morelink { font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #000000; text-decoration: none; padding-left: 15px;}
+        
+        /* Footer Links */
+        .yclinks { font-family: Verdana, Geneva, sans-serif; font-size: 8pt; color: #828282; }
+        .yclinks a { color: #828282; text-decoration: none; }
+        .yclinks a:hover { text-decoration: none; }
+
+        /* Search Box styling */
+        input { font-family: monospace; font-size: 10pt; border: 1px solid #828282; padding: 2px; }
+
+        /* Status marquee in header - inline, shrink-to-fit */
+        .pagetop-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            flex-wrap: nowrap;
+        }
+        .pagetop-links { min-width: 0; }
+        #status-marquee {
+            flex: 1 1 120px;
+            min-width: 0;
+            max-width: 140px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            white-space: nowrap;
+            font-family: monospace;
+            font-size: 8pt;
+            color: #ff6600;
+            vertical-align: middle;
+        }
+        #status-marquee:empty { max-width: 0; }
+        @media (max-width: 600px) {
+            .pagetop-row { flex-wrap: wrap; }
+            #status-marquee { max-width: 100%; flex: 1 1 100%; }
+        }
+
+        /* Zeta Symbol style */
+        .zeta-logo {
+            border: 1px solid #ff6600;
+            width: 18px;
+            height: 18px;
+            color: #ff6600;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12pt;
+            font-family: 'Times New Roman', serif;
+            display: block;
+        }
+        .zeta-logo span {
+            display: block;
+            position: relative;
+            top: -1px;
+        }
+
+        /* align with Hacker News header spacing */
+
+    </style>
+</head>
+<body>
+
+<center>
+    <table id="hnmain" border="0" cellpadding="0" cellspacing="0">
+        <!-- HEADER -->
+        <tr>
+            <td class="bgcolor top" bgcolor="#DFFF00" style="padding: 0 2px;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr style="height:22px;">
+                        <td style="width:18px; padding-right:4px;">
+                            <a href="index.html">
+                                <div class="zeta-logo"><span>ζ</span></div>
+                            </a>
+                        </td>
+                        <td class="pagetop">
+                            <span class="pagetop-row">
+                                <span class="pagetop-links">
+                                    <b class="hnname"><a href="index.html" title="Reload to the Hacker News Prime home page">Hacker News Prime</a></b>
+                                    <a href="#" title="Jump to the latest primes" onclick="jumpToLatest(); return false;">new</a> | 
+                                    <a href="?p=1" title="Take me back to the start">past</a> | 
+                                    <a href="?filter=posts" title="Earliest post to remain at some prime score (sorted by score), where the ID is also a prime number.">posts</a> | 
+                                    <a href="?filter=mersenne" title="Posts where the ID is a Mersenne prime">mersenne</a> | 
+                                    <a href="?filter=germain" title="Posts where the ID is a Sophie Germain prime">germain</a> | 
+                                    <a href="?filter=fermat" title="Posts where the ID is a Fermat prime">fermat</a> | 
+                                    <a href="?filter=palindrome" title="Posts where the ID is a palindromic prime">palindrome</a> | 
+                                    <a href="?filter=pkk" title="Posts where the ID is a prime p^k+k with p also prime"><span class="sup-anchor">p<sup>k</sup></span></a> | 
+                                    <a href="?filter=pk2" title="Posts where the ID is a prime p^k+2 with p also prime">2</a> | 
+                                    <a href="?filter=pk4" title="Posts where the ID is a prime p^k+4 with p also prime">4</a> | 
+                                    <a href="?filter=pk6" title="Posts where the ID is a prime p^k+6 with p also prime">6</a> | 
+                                    <a href="?filter=pk8" title="Posts where the ID is a prime p^k+8 with p also prime">8</a> | 
+                                    <a href="?filter=pk10" title="Posts where the ID is a prime p^k+10 with p also prime">10</a> | 
+                                    <a href="?filter=pk12" title="Posts where the ID is a prime p^k+12 with p also prime">12</a> | 
+                                    <a href="?filter=pkek2" title="Posts where the ID is a prime p^k+e with p also prime (e≤k²)">e≤k²</a> | 
+                                    <a href="?filter=pkesqrt" title="Posts where the ID is a prime p^k+e with p also prime (e&lt;√p)">e&lt;√p</a> | 
+                                    <a href="https://news.ycombinator.com/submit" title="Submit to Hacker News">submit</a>
+                                    <marquee id="status-marquee" scrollamount="3" direction="right"></marquee>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="pagetop" style="text-align:right; padding-right:4px; white-space:nowrap;">
+                            <a href="https://news.ycombinator.com/login" title="Log in to Hacker News">login</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <!-- SPACER -->
+        <tr style="height:10px"></tr>
+
+        <!-- CONTENT -->
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0" class="itemlist" id="content-table">
+                    <!-- Items injected here -->
+                </table>
+            </td>
+        </tr>
+
+        <!-- FOOTER -->
+        <tr>
+            <td>
+                <img src="https://news.ycombinator.com/s.gif" height="10" width="0"><table width="100%" cellspacing="0" cellpadding="1"><tr><td class="bgcolor bottom"></td></tr></table><br>
+                <center>
+                    <span class="yclinks">
+                        <a href="https://oeis.org/A000040">Pure Math</a> |
+                        <a href="https://github.com/DOSAYGO-STUDIO/prime-news">Deterministic</a> |
+                        <a href="https://github.com/HackerNews/API">API</a> |
+                        <a href="https://www.rsa.com/">Security</a> |
+                        <a href="https://dosaygo.com/terms">Legal</a> |
+                        <a href="https://www.ycombinator.com/apply">Apply to ζ</a> |
+                        <a href="mailto:hello@browserbox.io">Contact</a>
+                    </span>
+                    <br><br>
+                    <form onsubmit="event.preventDefault(); jumpToPrime();">
+                        Search:
+                        <input type="number" id="jumpInput" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="e.g. 1000000">
+                    </form>
+                </center>
+                <br>
+            </td>
+        </tr>
+    </table>
+</center>
+
+<!-- LOGIC -->
+    <script src="jswasm/sqlite3.js"></script>
+<script>
+    let db = null;
+    let manifest = null;
+    let filterManifest = null;
+    let currentShardIdx = -1;
+    let sqlite3 = null; // Global handle for double-probe
+    const ITEMS_PER_PAGE = 30;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentPage = parseInt(urlParams.get('p') || 1);
+    let currentFilter = urlParams.get('filter') || null;  // mersenne, germain, fermat, or null
+
+    const statusMarquee = document.getElementById('status-marquee');
+    const tableEl = document.getElementById('content-table');
+    const fmt = new Intl.NumberFormat('en-US');
+    function formatNum(n) {
+        const num = Number(n);
+        return Number.isFinite(num) ? fmt.format(num) : String(n);
+    }
+
+    async function maybeGunzip(u8) {
+        // gzip header 1f 8b
+        if (u8.length >= 2 && u8[0] === 0x1f && u8[1] === 0x8b) {
+            if (typeof DecompressionStream !== 'undefined') {
+                const ds = new DecompressionStream('gzip');
+                const stream = new Response(u8).body.pipeThrough(ds);
+                const buf = await new Response(stream).arrayBuffer();
+                return new Uint8Array(buf);
+            }
+            if (typeof pako !== 'undefined') {
+                return pako.ungzip(u8);
+            }
+            throw new Error('gzip not supported in this browser');
+        }
+        return u8;
+    }
+
+    async function fetchShardBytes(shardIdx) {
+        const base = `shards/shard_${shardIdx}.sqlite`;
+        let response = await fetch(`${base}.gz`, { cache: 'force-cache' });
+        if (response.ok) {
+            const u8 = new Uint8Array(await response.arrayBuffer());
+            return await maybeGunzip(u8);
+        }
+        if (response.status !== 404) {
+            throw new Error(`fetch failed ${response.status}: ${base}.gz`);
+        }
+        response = await fetch(base, { cache: 'force-cache' });
+        if (!response.ok) throw new Error(`fetch failed ${response.status}: ${base}`);
+        return new Uint8Array(await response.arrayBuffer());
+    }
+
+    async function loadShardDbOnce(shardIdx) {
+        const raw = await fetchShardBytes(shardIdx);
+        const p = sqlite3.wasm.allocFromTypedArray(raw);
+        const tempDb = new sqlite3.oo1.DB();
+        sqlite3.capi.sqlite3_deserialize(
+            tempDb.pointer, "main", p, raw.byteLength, raw.byteLength,
+            sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE
+        );
+        return tempDb;
+    }
+    const PRELOADED_PAGE1 = [{"idx":0,"id":2,"title":"A Student's Guide to Startups","user":"phyllis","score":16,"time":1160418628,"type":"story","prime_type":"germain,palindrome"},{"idx":1,"id":3,"title":"Woz Interview: the early days of Apple","user":"phyllis","score":7,"time":1160419233,"type":"story","prime_type":"mersenne,fermat,germain,palindrome"},{"idx":2,"id":5,"title":"Google, YouTube acquisition announcement could come tonight","user":"perler","score":7,"time":1160419864,"type":"story","prime_type":"fermat,germain,palindrome"},{"idx":3,"id":7,"title":"Sevin Rosen Unfunds - why?","user":"phyllis","score":5,"time":1160420455,"type":"story","prime_type":"mersenne,palindrome"},{"idx":4,"id":11,"title":"Participation Inequality: Encouraging More Users to Contribute","user":"frobnicate","score":5,"time":1160421884,"type":"story","prime_type":"germain,palindrome,pkk:3-2"},{"idx":5,"id":13,"title":"The Hardest Lessons for Startups to Learn","user":"phyllis","score":5,"time":1160422572,"type":"story","prime_type":null},{"idx":6,"id":17,"title":"Is there anywhere to eat on Sandhill Road?","user":"pg","score":0,"time":1160423565,"type":"comment","prime_type":"fermat"},{"idx":7,"id":19,"title":"Will Silicon Light Illuminate the Future?","user":"pg","score":2,"time":1160423943,"type":"story","prime_type":null},{"idx":8,"id":23,"title":"This is interesting, but the limitations become apparent with one of their example se...","user":"starklysnarky","score":0,"time":1160447453,"type":"comment","prime_type":"germain"},{"idx":9,"id":29,"title":"[Untitled]","user":"spez","score":2,"time":1160494490,"type":"story","prime_type":"germain"},{"idx":10,"id":31,"title":"I'm tuned...","user":"pg","score":0,"time":1160494805,"type":"comment","prime_type":"mersenne"},{"idx":11,"id":37,"title":"Woah, Scrybe! - A new kind of online organiser.","user":"gaborcselle","score":4,"time":1160511234,"type":"story","prime_type":null},{"idx":12,"id":41,"title":"it's interesting how a simple set of features can make the product seem wholly differ...","user":"starklysnarky","score":0,"time":1160520368,"type":"comment","prime_type":"germain"},{"idx":13,"id":43,"title":"Yahoo's Growth Being Eroded by New Rivals - New York Times","user":"farmer","score":3,"time":1160577901,"type":"story","prime_type":null},{"idx":14,"id":47,"title":"Another audience-driven news site that thinks it will win by paying users ","user":"onebeerdave","score":2,"time":1160603268,"type":"story","prime_type":null},{"idx":15,"id":53,"title":"Top ten geek business myths","user":"gaborcselle","score":7,"time":1160692722,"type":"story","prime_type":"germain"},{"idx":16,"id":59,"title":"NYT on the network of ex-PayPal employees in Silicon Valley","user":"gaborcselle","score":3,"time":1161073953,"type":"story","prime_type":null},{"idx":17,"id":61,"title":"VCs Prefer to Fund Nearby Firms - New York Times","user":"goldfish","score":2,"time":1161541795,"type":"story","prime_type":null},{"idx":18,"id":67,"title":"[Untitled]","user":"zak","score":14,"time":1171854098,"type":"story","prime_type":null},{"idx":19,"id":71,"title":"[Untitled]","user":"zak","score":2,"time":1171854730,"type":"story","prime_type":null},{"idx":20,"id":73,"title":"New Revenue Stream For Bloggers: TextMark SMS Alerts","user":"onebeerdave","score":1,"time":1171855797,"type":"story","prime_type":null},{"idx":21,"id":79,"title":"Launch party circuit, eh?","user":"matt","score":0,"time":1171860599,"type":"comment","prime_type":null},{"idx":22,"id":83,"title":"Why Startups Don't Condense in Europe","user":"gaborcselle","score":12,"time":1171878148,"type":"story","prime_type":"germain"},{"idx":23,"id":89,"title":"Win A Copy Of Yojimbo - a pretty good organizer for the Mac.","user":"nate","score":2,"time":1171907246,"type":"story","prime_type":"germain"},{"idx":24,"id":97,"title":"An Overview of the Five Gazillion Video Startups","user":"emmett","score":11,"time":1171909762,"type":"story","prime_type":null},{"idx":25,"id":101,"title":"Dutch Sharewire Taking Mobile Content Off Deck","user":"pg","score":4,"time":1171910449,"type":"story","prime_type":"palindrome"},{"idx":26,"id":103,"title":"Google acquires advertising startup","user":"emmett","score":6,"time":1171910848,"type":"story","prime_type":null},{"idx":27,"id":107,"title":"How much control should our users have?","user":"gautam","score":5,"time":1171914587,"type":"story","prime_type":null},{"idx":28,"id":109,"title":"Do YOU have the balls to try? Part I","user":"matt","score":19,"time":1171915400,"type":"story","prime_type":null},{"idx":29,"id":113,"title":" Isolating Causality: Bad Market or Bad Company","user":"casey","score":3,"time":1171916170,"type":"story","prime_type":"germain"}];
+    if (PRELOADED_PAGE1.length) { renderRows(PRELOADED_PAGE1, 0, 1); }
+
+    // Status helper - marquee handles scrolling, just update text
+    function setStatus(msg) {
+        statusMarquee.textContent = msg || '';
+    }
+
+    function enableHeaderSPA() {
+        const header = document.querySelector('#hnmain');
+        if (!header) return;
+        header.addEventListener('click', (event) => {
+            const anchor = event.target.closest('a');
+            if (!anchor) return;
+            const href = anchor.getAttribute('href');
+            if (!href || !href.startsWith('?')) return;
+            const params = new URLSearchParams(href.slice(1));
+            const filter = params.get('filter') || null;
+            const page = Math.max(1, parseInt(params.get('p') || '1', 10));
+            event.preventDefault();
+            goToPage(page, filter);
+        });
+    }
+
+    // --- PAGE CACHE (localStorage) ---
+    const CACHE_PREFIX = 'phn_page_';
+
+    function getCachedPage(page) {
+        try {
+            const data = localStorage.getItem(CACHE_PREFIX + page);
+            return data ? JSON.parse(data) : null;
+        } catch (e) { return null; }
+    }
+
+    function setCachedPage(page, rows) {
+        try {
+            localStorage.setItem(CACHE_PREFIX + page, JSON.stringify(rows));
+        } catch (e) {
+            // Storage full - clear old entries
+            clearOldCache();
+        }
+    }
+
+    function clearOldCache() {
+        // Remove oldest cached pages if storage is full
+        const keys = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith(CACHE_PREFIX)) keys.push(key);
+        }
+        // Remove first half of cached pages
+        keys.slice(0, Math.floor(keys.length / 2)).forEach(k => localStorage.removeItem(k));
+    }
+
+    // --- FIREBASE RATE LIMITING ---
+    let apiCooldownUntil = 0;  // timestamp when we can retry API
+    const API_COOLDOWN_MS = 30000;  // 30 second backoff
+
+
+    // --- MATH HELPERS ---
+
+    // A simple seeded RNG (Mulberry32) so scores are constant per ID
+    function seededRandom(seed) {
+        let t = seed + 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+
+    // Generate a score based on HN distribution (Power Law / Exponential)
+    function generateCommentScore(id) {
+        const r = seededRandom(id);
+        let score = Math.floor(-Math.log(1 - r) * 1.5) + 1;
+        if (score > 100) score = 100; // Cap outliers
+        return score;
+    }
+
+    // --- CONFIG ---
+    const DEBUG = false;  // Set true to show alert modals during jump
+    const ESTIMATOR = 'legendre'; // Options: 'pnt', 'legendre', 'li'
+
+    const Estimators = {
+        // Basic Prime Number Theorem: π(x) ≈ x / ln(x)
+        pnt: function(x) {
+            if (x < 2) return 0;
+            return x / Math.log(x);
+        },
+
+        // Legendre's Formula: π(x) ≈ x / (ln(x) - 1.08366)
+        // More accurate for x in the millions
+        legendre: function(x) {
+            if (x < 2) return 0;
+            return x / (Math.log(x) - 1.08366);
+        },
+
+        // Logarithmic Integral Asymptotic Expansion
+        // Li(x) ≈ x/ln(x) * (1 + 1!/ln(x) + 2!/ln²(x) + 3!/ln³(x) + ...)
+        li: function(x) {
+            if (x < 2) return 0;
+            const lnx = Math.log(x);
+            const lnx2 = lnx * lnx;
+            const lnx3 = lnx2 * lnx;
+            const lnx4 = lnx3 * lnx;
+            const lnx5 = lnx4 * lnx;
+            // Asymptotic series: 1 + 1!/ln + 2!/ln² + 3!/ln³ + 4!/ln⁴ + 5!/ln⁵
+            const series = 1 + 1/lnx + 2/lnx2 + 6/lnx3 + 24/lnx4 + 120/lnx5;
+            return (x / lnx) * series;
+        }
+    };
+
+    // Get the active estimator
+    function estimatePrimeCount(x) {
+        return Math.floor(Estimators[ESTIMATOR](x));
+    }
+
+    // --- JUMP TO LATEST ---
+    // Fetch current max from Firebase, calculate page based on DB + estimated gap
+    async function jumpToLatest() {
+        // Check if API is cooling down
+        if (Date.now() < apiCooldownUntil) {
+            setStatus('Cooldown...');
+            goToPage(Math.floor(manifest.totalPrimes / ITEMS_PER_PAGE));
+            return;
+        }
+
+        setStatus('Latest...');
+
+        try {
+            const resp = await fetch('https://hacker-news.firebaseio.com/v0/maxitem.json');
+            if (resp.status === 429 || resp.status === 503) {
+                apiCooldownUntil = Date.now() + API_COOLDOWN_MS;
+                setStatus('Firebase hot...');
+                goToPage(Math.floor(manifest.totalPrimes / ITEMS_PER_PAGE));
+                return;
+            }
+            const maxItem = parseInt(await resp.json());
+
+            // Primes in DB (exact)
+            const dbPrimes = manifest.totalPrimes;
+            const dbMaxId = manifest.maxId;
+
+            // Primes in the gap between DB and live (estimated)
+            const piMax = estimatePrimeCount(maxItem);
+            const piDbMax = estimatePrimeCount(dbMaxId);
+            const gapPrimes = piMax - piDbMax;
+
+            // Total primes = DB + gap
+            const totalPrimes = dbPrimes + gapPrimes;
+            const latestPage = Math.max(1, Math.floor(totalPrimes / ITEMS_PER_PAGE) + 1);
+
+            console.log(`[jumpToLatest] maxItem=${maxItem} dbMax=${dbMaxId} dbPrimes=${dbPrimes} gapPrimes≈${gapPrimes} total≈${totalPrimes} page=${latestPage}`);
+            goToPage(latestPage, null);  // Clear filter when going to latest
+        } catch (e) {
+            console.error('Failed to fetch maxitem:', e);
+            setStatus('API down');
+            goToPage(Math.floor(manifest.totalPrimes / ITEMS_PER_PAGE), null);  // Clear filter
+        }
+    }
+
+    // Navigate without full page reload - update URL and load content in-place
+    function goToPage(page, filter = currentFilter) {
+        currentPage = page;
+        currentFilter = filter;
+        const url = filter ? `?filter=${filter}&p=${page}` : `?p=${page}`;
+        history.pushState({page, filter}, '', url);
+        loadPage(page);
+    }
+
+    // --- THE ITERATIVE PROBE ---
+    // π(target) - π(landing) = primes to jump over
+    async function jumpToPrime() {
+        const target = parseInt(document.getElementById('jumpInput').value);
+        if (!target || target < 2) return;
+
+        const maxShard = Math.ceil(manifest.totalPrimes / manifest.shardSize) - 1;
+        const log = [];  // collect debug info
+
+        // Helper: load a page and get the first prime on it
+        async function loadPage(pageNum) {
+            const startIdx = (pageNum - 1) * ITEMS_PER_PAGE;
+            const shardIdx = Math.max(0, Math.min(Math.floor(startIdx / manifest.shardSize), maxShard));
+
+            let raw;
+            try {
+                raw = await fetchShardBytes(shardIdx);
+            } catch (e) {
+                return null;
+            }
+            const p = sqlite3.wasm.allocFromTypedArray(raw);
+            const tempDb = new sqlite3.oo1.DB();
+            sqlite3.capi.sqlite3_deserialize(
+                tempDb.pointer, "main", p, raw.byteLength, raw.byteLength,
+                sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE
+            );
+
+            // Get first and last prime on THIS PAGE (not shard)
+            const rows = tempDb.exec({
+                sql: "SELECT idx, id FROM items WHERE idx >= ? AND idx < ? ORDER BY idx ASC",
+                bind: [startIdx, startIdx + ITEMS_PER_PAGE],
+                rowMode: 'object',
+                returnValue: "resultRows"
+            });
+            tempDb.close();
+
+            if (!rows || rows.length === 0) return null;
+            return {
+                firstId: rows[0].id,
+                firstIdx: rows[0].idx,
+                lastId: rows[rows.length - 1].id,
+                lastIdx: rows[rows.length - 1].idx
+            };
+        }
+
+        // Check if target is on this page
+        function targetOnPage(page, target) {
+            return page && target >= page.firstId && target <= page.lastId;
+        }
+
+        try {
+            const piTarget = estimatePrimeCount(target);
+            let probePage = Math.max(1, Math.floor(piTarget / ITEMS_PER_PAGE) + 1);
+            let iteration = 0;
+            const MAX_ITERATIONS = 10;
+
+            log.push(`TARGET: ${target}`);
+            log.push(`π(${target}) ≈ ${piTarget}`);
+            log.push(`---`);
+
+            while (iteration < MAX_ITERATIONS) {
+                iteration++;
+                setStatus(`[${ESTIMATOR.toUpperCase()}] ${iteration}: p${probePage}`);
+
+                const page = await loadPage(probePage);
+                if (!page) {
+                    log.push(`Iter ${iteration}: Page ${probePage} failed to load`);
+                    break;
+                }
+
+                log.push(`Iter ${iteration}: Page ${probePage}`);
+                log.push(`  Range: ${page.firstId} - ${page.lastId}`);
+
+                // Check if we found it
+                if (target >= page.firstId && target <= page.lastId) {
+                    log.push(`  ✓ TARGET FOUND ON PAGE!`);
+                    log.push(`---`);
+                    log.push(`Total iterations: ${iteration}`);
+                    if (DEBUG) alert(log.join('\n'));
+                    console.log(log.join('\n'));
+                    setStatus('');
+                    goToPage(probePage, null);  // Clear filter when searching
+                    return;
+                }
+
+                // Calculate correction using DIFFERENCE of estimators
+                let landingId, direction;
+                if (page.lastId < target) {
+                    // UNDERSHOT - use last prime on page
+                    landingId = page.lastId;
+                    direction = 1;
+                    log.push(`  UNDERSHOT by ${target - landingId}`);
+                } else {
+                    // OVERSHOT - use first prime on page
+                    landingId = page.firstId;
+                    direction = -1;
+                    log.push(`  OVERSHOT by ${landingId - target}`);
+                }
+
+                // THE KEY: π(target) - π(landing) = primes between them
+                const piLanding = estimatePrimeCount(landingId);
+                const primesToJump = Math.abs(piTarget - piLanding);
+                const pageJump = Math.max(1, Math.floor(primesToJump / ITEMS_PER_PAGE));
+
+                log.push(`  π(${target}) = ${piTarget}`);
+                log.push(`  π(${landingId}) = ${piLanding}`);
+                log.push(`  Δπ = ${primesToJump} primes → ${pageJump} pages`);
+
+                probePage = Math.max(1, probePage + direction * pageJump);
+                log.push(`  Next page: ${probePage}`);
+                log.push(`---`);
+            }
+
+            log.push(`Stopped after ${iteration} iterations`);
+            if (DEBUG) alert(log.join('\n'));
+            console.log(log.join('\n'));
+            setStatus('');
+            goToPage(probePage, null);  // Clear filter when searching
+
+        } catch (e) {
+            console.error("Probe failed:", e);
+            log.push(`ERROR: ${e.message}`);
+            if (DEBUG) alert(log.join('\n'));
+            console.log(log.join('\n'));
+            const fallbackPage = Math.max(1, Math.floor(estimatePrimeCount(target) / ITEMS_PER_PAGE) + 1);
+            setStatus('');
+            goToPage(fallbackPage, null);  // Clear filter when searching
+        }
+    }
+
+    // --- UTILITIES ---
+
+    function timeAgo(ts) {
+        if (!ts) return '';
+        const seconds = Math.floor(Date.now() / 1000) - ts;
+        let interval = seconds / 31536000;
+        if (interval > 1) return Math.floor(interval) + " years ago";
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + " months ago";
+        interval = seconds / 86400;
+        if (interval > 1) return Math.floor(interval) + " days ago";
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + " hours ago";
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + " minutes ago";
+        return Math.floor(seconds) + " seconds ago";
+    }
+
+    // Tiny helper for client-side snippet generation
+    function getSnippet(html) {
+         if (!html) return '[Comment]';
+         let text = html.replace(/<[^>]+>/g, ' ');
+         text = text.replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+         text = text.replace(/\s+/g, ' ').trim();
+         if (text.length > 80) return text.substring(0, 80) + '...';
+         return text || '[Comment]';
+    }
+
+    // --- CORE LOGIC ---
+
+    async function init() {
+        try {
+            [manifest, filterManifest] = await Promise.all([
+                fetch('manifest.json').then(r => r.json()),
+                fetch('filter-manifest.json').then(r => r.json())
+            ]);
+            sqlite3 = await window.sqlite3InitModule();
+
+            // Handle back/forward buttons
+            window.addEventListener('popstate', (e) => {
+                const params = new URLSearchParams(window.location.search);
+                const page = e.state?.page || parseInt(params.get('p')) || 1;
+                const filter = e.state?.filter || params.get('filter') || null;
+                currentPage = page;
+                currentFilter = filter;
+                // Clear filtered cache if filter changed
+                if (filter !== filteredCacheType) {
+                    filteredCache = null;
+                    filteredCacheType = null;
+                }
+                loadPage(page);
+            });
+
+            enableHeaderSPA();
+            if (PRELOADED_PAGE1.length) {
+                renderRows(PRELOADED_PAGE1, 0, 1);
+            }
+
+            await loadPage(currentPage);
+        } catch (e) {
+            tableEl.innerHTML = `<tr><td style="padding:20px">Error loading Prime HN: ${e.message}</td></tr>`;
+        }
+    }
+
+    // Cache for filtered results - now uses filter manifest for efficient loading
+    let filteredCache = null;
+    let filteredCacheType = null;
+    let shardCache = new Map(); // Cache loaded shards
+
+    // Get WHERE clause for a filter type
+    function getFilterWhereClause(filter) {
+        if (['mersenne', 'fermat', 'germain', 'palindrome'].includes(filter)) {
+            return `prime_type LIKE '%${filter}%'`;
+        } else if (filter === 'pkk') {
+            return `prime_type LIKE '%pkk:%'`;
+        } else if (filter.startsWith('pk') && /^pk\d+$/.test(filter)) {
+            return `prime_type LIKE '%${filter}:%'`;
+        } else if (filter === 'pkek2') {
+            return `prime_type LIKE '%pkek2:%'`;
+        } else if (filter === 'pkesqrt') {
+            return `prime_type LIKE '%pkesqrt:%'`;
+        }
+        return `prime_type LIKE '%${filter}%'`;
+    }
+
+    // Load a shard (with caching)
+    async function loadShard(shardIdx) {
+        if (shardCache.has(shardIdx)) return shardCache.get(shardIdx);
+
+        let raw;
+        try {
+            raw = await fetchShardBytes(shardIdx);
+        } catch (e) {
+            return null;
+        }
+        const p = sqlite3.wasm.allocFromTypedArray(raw);
+        const tempDb = new sqlite3.oo1.DB();
+        sqlite3.capi.sqlite3_deserialize(
+            tempDb.pointer, "main", p, raw.byteLength, raw.byteLength,
+            sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE
+        );
+
+        shardCache.set(shardIdx, tempDb);
+        // Limit cache size
+        if (shardCache.size > 10) {
+            const oldest = shardCache.keys().next().value;
+            shardCache.get(oldest).close();
+            shardCache.delete(oldest);
+        }
+        return tempDb;
+    }
+
+    // Find which shards contain items for a filtered page range
+    function getShardsForRange(filter, startIdx, endIdx) {
+        const filterInfo = filterManifest[filter];
+        if (!filterInfo || !filterInfo.shards.length) return [];
+
+        const result = [];
+        let prevCumulative = 0;
+
+        for (const shard of filterInfo.shards) {
+            // Shard contains items in range [prevCumulative, shard.cumulative)
+            if (shard.cumulative > startIdx && prevCumulative < endIdx) {
+                result.push({
+                    idx: shard.idx,
+                    localStart: Math.max(0, startIdx - prevCumulative),
+                    localEnd: Math.min(shard.count, endIdx - prevCumulative)
+                });
+            }
+            prevCumulative = shard.cumulative;
+            if (prevCumulative >= endIdx) break;
+        }
+        return result;
+    }
+
+    // Load filtered primes for a specific page (efficient - only loads needed shards)
+    async function loadFilteredPage(filter, page) {
+        const filterInfo = filterManifest[filter];
+        if (!filterInfo) return { rows: [], total: 0 };
+
+        const startIdx = (page - 1) * ITEMS_PER_PAGE;
+        const endIdx = startIdx + ITEMS_PER_PAGE;
+        const shardsNeeded = getShardsForRange(filter, startIdx, endIdx);
+
+        if (shardsNeeded.length === 0) return { rows: [], total: filterInfo.total };
+
+        setStatus(`Loading ${filter}...`);
+        const whereClause = getFilterWhereClause(filter);
+        const allRows = [];
+
+        for (const shardInfo of shardsNeeded) {
+            const tempDb = await loadShard(shardInfo.idx);
+            if (!tempDb) continue;
+
+            const rows = tempDb.exec({
+                sql: `SELECT * FROM items WHERE ${whereClause} ORDER BY idx ASC LIMIT ? OFFSET ?`,
+                bind: [shardInfo.localEnd - shardInfo.localStart, shardInfo.localStart],
+                rowMode: 'object',
+                returnValue: "resultRows"
+            });
+            if (rows && rows.length) allRows.push(...rows);
+        }
+
+        setStatus('');
+        return { rows: allRows, total: filterInfo.total };
+    }
+
+    // Fallback for filters not in manifest (like 'posts')
+    async function loadFilteredPrimesFull(filter) {
+        if (filteredCacheType === filter && filteredCache) return filteredCache;
+
+        setStatus(`Loading ${filter}...`);
+        const allFiltered = [];
+        const totalShards = Math.ceil(manifest.totalPrimes / manifest.shardSize);
+        const MAX_CONCURRENCY = 4;
+        let nextShard = 0;
+
+        async function worker() {
+            while (true) {
+                const shardIdx = nextShard++;
+                if (shardIdx >= totalShards) break;
+                setStatus(`Scan ${filter}… ${shardIdx + 1}/${totalShards}`);
+                let tempDb = null;
+                try {
+                    tempDb = await loadShardDbOnce(shardIdx);
+                    if (!tempDb) continue;
+                    const rows = tempDb.exec({
+                        sql: `SELECT * FROM items WHERE prime_type LIKE ?`,
+                        bind: [`%${filter}%`],
+                        rowMode: 'object',
+                        returnValue: "resultRows"
+                    });
+                    if (rows && rows.length) allFiltered.push(...rows);
+                } catch (e) {
+                    continue;
+                } finally {
+                    if (tempDb) tempDb.close();
+                }
+            }
+        }
+
+        await Promise.all(Array.from({ length: MAX_CONCURRENCY }, worker));
+
+        if (filter === 'posts') {
+            allFiltered.sort((a, b) => (b.score - a.score) || (a.idx - b.idx));
+        } else {
+            allFiltered.sort((a, b) => (a.idx - b.idx));
+        }
+
+        filteredCache = allFiltered;
+        filteredCacheType = filter;
+        setStatus('');
+        return allFiltered;
+    }
+
+    async function loadPage(page) {
+        // FILTERED VIEW - special prime types
+        if (currentFilter) {
+            const startIdx = (page - 1) * ITEMS_PER_PAGE;
+
+            // Use efficient manifest-based loading if filter is in manifest
+            if (filterManifest && filterManifest[currentFilter]) {
+                const { rows, total } = await loadFilteredPage(currentFilter, page);
+
+                if (rows.length === 0) {
+                    tableEl.innerHTML = `<tr><td style="padding:20px">No more ${currentFilter} primes found.</td></tr>`;
+                    return;
+                }
+
+                renderRows(rows, startIdx, page, total);
+                return;
+            }
+
+            // Fallback for filters not in manifest (like 'posts')
+            const allFiltered = await loadFilteredPrimesFull(currentFilter);
+            const rows = allFiltered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+            if (rows.length === 0) {
+                tableEl.innerHTML = `<tr><td style="padding:20px">No more ${currentFilter} primes found.</td></tr>`;
+                return;
+            }
+
+            renderRows(rows, startIdx, page, allFiltered.length);
+            return;
+        }
+
+        // NORMAL VIEW - all primes
+        const startIdx = (page - 1) * ITEMS_PER_PAGE;
+        const endIdx = startIdx + ITEMS_PER_PAGE;
+
+        // Check cache first
+        const cached = getCachedPage(page);
+        if (cached) {
+            setStatus('');
+            renderRows(cached, startIdx, page);
+            return;
+        }
+
+        if (startIdx >= manifest.totalPrimes) {
+            await renderLiveMode(startIdx, endIdx, page);
+            setStatus('');
+            return;
+        }
+
+        const requiredShard = Math.floor(startIdx / manifest.shardSize);
+
+        if (currentShardIdx !== requiredShard) {
+            setStatus(`Shard ${requiredShard}...`);
+            const raw = await fetchShardBytes(requiredShard);
+            const p = sqlite3.wasm.allocFromTypedArray(raw);
+
+            if (db) db.close();
+            db = new sqlite3.oo1.DB();
+
+            sqlite3.capi.sqlite3_deserialize(
+                db.pointer, "main", p, raw.byteLength, raw.byteLength,
+                sqlite3.capi.SQLITE_DESERIALIZE_FREEONCLOSE
+            );
+            currentShardIdx = requiredShard;
+        }
+
+        setStatus('');
+
+        const rows = db.exec({
+            sql: "SELECT * FROM items WHERE idx >= ? AND idx < ? ORDER BY idx ASC",
+            bind: [startIdx, endIdx],
+            rowMode: 'object',
+            returnValue: "resultRows"
+        });
+
+        renderRows(rows, startIdx, page);
+    }
+
+    function getPairInfoForItem(item) {
+        if (!item) return null;
+
+        // Derive the "paired" value from the active filter, not from whatever
+        // other tags the item may have.
+        if (currentFilter === 'germain') {
+            const q = 2 * item.id + 1;
+            return { value: q, title: `Pair for Germain: q = 2·${item.id}+1` };
+        }
+
+        if (currentFilter === 'mersenne') {
+            const candidate = item.id + 1;
+            const p = Math.round(Math.log2(candidate));
+            if (p > 0 && (1 << Math.min(p, 30)) === candidate) {
+                return { value: p, title: `Pair for Mersenne: ${item.id} = 2^p−1, p=${p}` };
+            }
+            if (p > 0 && Math.pow(2, p) === candidate) {
+                return { value: p, title: `Pair for Mersenne: ${item.id} = 2^p−1, p=${p}` };
+            }
+            return null;
+        }
+
+        if (currentFilter === 'fermat') {
+            const candidate = item.id - 1;
+            const exp = Math.round(Math.log2(candidate));
+            if (exp > 0 && Math.pow(2, exp) === candidate) {
+                const n = Math.round(Math.log2(exp));
+                if (n >= 0 && Math.pow(2, n) === exp) {
+                    return { value: exp, title: `Pair for Fermat: ${item.id} = 2^(2^n)+1, 2^n=${exp}` };
+                }
+            }
+            return null;
+        }
+
+        if (currentFilter === 'palindrome') {
+            const reversed = parseInt(String(item.id).split('').reverse().join(''), 10);
+            return { value: reversed, title: `Pair for palindrome: reverse(${item.id})` };
+        }
+
+        const primeType = item?.prime_type;
+        if (!primeType) return null;
+        const parts = String(primeType).split(',').map(s => s.trim());
+
+        const desiredPrefixes = [];
+        if (currentFilter === 'pkk') desiredPrefixes.push('pkk:');
+        if (currentFilter && currentFilter.startsWith('pk') && /^\d+$/.test(currentFilter.slice(2))) {
+            desiredPrefixes.push(`${currentFilter}:`);
+        }
+        if (currentFilter === 'pkek2') desiredPrefixes.push('pkek2:');
+        if (currentFilter === 'pkesqrt') desiredPrefixes.push('pkesqrt:');
+
+        const preferred = desiredPrefixes.length ? parts.filter(p => desiredPrefixes.some(pref => p.startsWith(pref))) : parts;
+
+        for (const part of preferred) {
+            let match = part.match(/^pkk:(\d+)-(\d+)$/);
+            if (match) {
+                const p = parseInt(match[1], 10);
+                const k = parseInt(match[2], 10);
+                return { value: p, title: `Pair for p^k+k: ${item.id} = ${p}^${k}+${k}` };
+            }
+
+            match = part.match(/^pk(\d+):(\d+)-(\d+)$/);
+            if (match) {
+                const e = parseInt(match[1], 10);
+                const p = parseInt(match[2], 10);
+                const k = parseInt(match[3], 10);
+                return { value: p, title: `Pair for p^k+${e}: ${item.id} = ${p}^${k}+${e}` };
+            }
+
+            match = part.match(/^pkek2:(\d+)-(\d+)-(\d+)$/);
+            if (match) {
+                const p = parseInt(match[1], 10);
+                const k = parseInt(match[2], 10);
+                const e = parseInt(match[3], 10);
+                return { value: p, title: `Pair for p^k+e: ${item.id} = ${p}^${k}+${e}` };
+            }
+
+            match = part.match(/^pkesqrt:(\d+)-(\d+)-(\d+)$/);
+            if (match) {
+                const p = parseInt(match[1], 10);
+                const k = parseInt(match[2], 10);
+                const e = parseInt(match[3], 10);
+                return { value: p, title: `Pair for p^k+e: ${item.id} = ${p}^${k}+${e}` };
+            }
+        }
+
+        return null;
+    }
+
+    function renderRows(items, startRankIndex, page, totalFiltered = null) {
+        let html = '';
+        items.forEach((item, i) => {
+            const rank = startRankIndex + i + 1;
+            let scoreDisplay = item.score + " points";
+            let scoreClass = "score";
+            
+            if (item.type === 'comment' || item.score === 0) {
+                 const synthScore = generateCommentScore(item.id);
+                 scoreDisplay = `<span title="Stable guess based on Zipfian Exponential distribution">${synthScore} points</span>`;
+            }
+
+            let displayTitle = item.title;
+            let url = `https://news.ycombinator.com/item?id=${item.id}`; 
+            
+            const pairInfo = currentFilter ? getPairInfoForItem(item) : null;
+            const zetaLinks = pairInfo
+                ? `<a class="prime-zeta" href="https://www.wolframalpha.com/input?i=${item.id}" target="_blank" title="Prime properties for this post's ID">ζ(${formatNum(item.id)})</a> <a class="prime-zeta" href="https://www.wolframalpha.com/input?i=${pairInfo.value}" target="_blank" title="${pairInfo.title}">ζ(${formatNum(pairInfo.value)})</a>`
+                : `<a class="prime-zeta" href="https://www.wolframalpha.com/input?i=${item.id}" target="_blank" title="Prime properties for this post's ID">ζ(${formatNum(item.id)})</a>`;
+
+            html += `
+                <tr class="athing" id="${item.id}">
+                    <td align="right" valign="top" class="title"><span class="rank">${rank}.</span></td>
+                    <td valign="top" class="votelinks"><center><a href="https://news.ycombinator.com/item?id=${item.id}"><div class="votearrow" title="upvote"></div></a></center></td>
+                    <td class="title">
+                        <span class="titleline"><a href="${url}">${displayTitle}</a></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="subtext">
+                        <span class="subline">
+                            <span class="${scoreClass}" id="score_${item.id}">${scoreDisplay}</span> 
+                            by <a href="https://news.ycombinator.com/user?id=${item.user}" class="hnuser">${item.user}</a> 
+                            <span class="age" title="${new Date(item.time*1000).toISOString()}">
+                                <a href="https://news.ycombinator.com/item?id=${item.id}">${timeAgo(item.time)}</a>
+                            </span> | 
+                            ${zetaLinks}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="spacer" style="height:5px"></tr>
+            `;
+        });
+        
+        // Show "More" link only if there are more items
+        const hasMore = totalFiltered
+            ? (startRankIndex + items.length < totalFiltered)
+            : true;  // For normal view, always show (live mode handles end)
+
+        if (hasMore) {
+            // Explicitly preserve current filter when clicking More
+            const filterArg = currentFilter ? `'${currentFilter}'` : 'null';
+            html += `<tr class="morespace" style="height:10px"></tr><tr><td colspan="2"></td><td class="title"><a href="#" onclick="goToPage(${page + 1}, ${filterArg}); return false;" class="morelink" rel="next">More</a></td></tr>`;
+        }
+        tableEl.innerHTML = html;
+    }
+
+    function isPrime(num) {
+        if (num % 2 === 0) return false;
+        if (num % 3 === 0) return false;
+        const limit = Math.sqrt(num);
+        for (let i = 5; i <= limit; i += 6) {
+            if (num % i === 0 || num % (i + 2) === 0) return false;
+        }
+        return true;
+    }
+
+    async function fetchWithRateLimit(url) {
+        if (Date.now() < apiCooldownUntil) {
+            throw new Error('API cooling down');
+        }
+        const resp = await fetch(url);
+        if (resp.status === 429 || resp.status === 503) {
+            apiCooldownUntil = Date.now() + API_COOLDOWN_MS;
+            throw new Error('API rate limited');
+        }
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        return resp.json();
+    }
+
+    async function renderLiveMode(startIdx, endIdx, page) {
+        let maxItem = 0;
+        try {
+            setStatus('Live API...');
+            maxItem = parseInt(await fetchWithRateLimit('https://hacker-news.firebaseio.com/v0/maxitem.json'));
+        } catch(e) {
+            if (e.message.includes('rate') || e.message.includes('cooling')) {
+                setStatus('Firebase hot. Backoff...');
+                setTimeout(() => goToPage(Math.floor(manifest.totalPrimes / ITEMS_PER_PAGE)), 1500);
+            } else {
+                setStatus('API down');
+                tableEl.innerHTML = '<tr><td style="padding:20px">Error reaching HN API.</td></tr>';
+            }
+            return;
+        }
+
+        const primesFound = [];
+        let candidate = parseInt(manifest.maxId) + 1;
+        const neededPrimes = endIdx - startIdx;
+        const primesToSkip = startIdx - manifest.totalPrimes;
+        let skipped = 0;
+        const HARD_LIMIT = 5_000_000;
+        let checks = 0;
+
+        if (candidate > maxItem) {
+            tableEl.innerHTML = `<tr><td style="padding:20px">Live API is behind Static DB.</td></tr>`;
+            return;
+        }
+
+        // Scan for primes (no API calls, just math)
+        setStatus('Scanning...');
+        while (primesFound.length < neededPrimes && candidate <= maxItem && checks < HARD_LIMIT) {
+            if (checks % 10000 === 0) {
+                setStatus(`Scan ${candidate}...`);
+                await new Promise(r => setTimeout(r, 0));
+            }
+            if (isPrime(candidate)) {
+                if (skipped < primesToSkip) skipped++;
+                else primesFound.push({id: candidate, idx: startIdx + primesFound.length});
+            }
+            candidate++;
+            checks++;
+        }
+
+        if (primesFound.length === 0) {
+            setStatus('');
+            if (skipped > 0) {
+                tableEl.innerHTML = `<tr><td style="padding:20px; text-align:center">Found ${skipped} primes but all before this page.</td></tr>`;
+            } else {
+                tableEl.innerHTML = `<tr><td style="padding:20px; text-align:center;"><h3>The Frontier</h3><p>Max ID: ${maxItem}</p><p>Waiting for new primes...</p></td></tr>`;
+            }
+            return;
+        }
+
+        // Fetch content from Firebase (minimal calls - one per prime found)
+        setStatus(`Fetching ${primesFound.length}...`);
+        const liveItems = [];
+        try {
+            for (let i = 0; i < primesFound.length; i += 10) {
+                const batch = primesFound.slice(i, i + 10);
+                const batchResults = await Promise.all(
+                    batch.map(p => fetchWithRateLimit(`https://hacker-news.firebaseio.com/v0/item/${p.id}.json`))
+                );
+                liveItems.push(...batchResults);
+                setStatus(`${liveItems.length}/${primesFound.length} fetched`);
+            }
+        } catch (e) {
+            if (e.message.includes('rate') || e.message.includes('cooling')) {
+                setStatus('Firebase hot. Backoff...');
+                setTimeout(() => goToPage(Math.floor(manifest.totalPrimes / ITEMS_PER_PAGE)), 1500);
+                return;
+            }
+        }
+
+        const rows = liveItems.map((item, i) => {
+            if (!item) return null;
+            return {
+                id: item.id,
+                title: item.title || (item.text ? getSnippet(item.text) : '[Untitled]'),
+                user: item.by || 'anon',
+                score: item.score || 0,
+                time: item.time,
+                type: item.type,
+                idx: startIdx + i
+            };
+        }).filter(x => x);
+
+        // Cache and render
+        setCachedPage(page, rows);
+        setStatus('');
+        renderRows(rows, startIdx, page);
+    }
+
+    init();
+</script>
+</body>
+</html>
